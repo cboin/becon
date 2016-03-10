@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+# coding: utf8
 
 import sqlite3
 import os
+import sys
+import hashlib
+import getpass
 from os.path import expanduser
 
 def connect_db():
@@ -26,4 +30,9 @@ def config_db(t1, t2):
             cursor.execute("CREATE TABLE password(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, host VARCHAR(255), user_id INTEGER, password VARCHAR(255), dt datetime DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(user_id) REFERENCES users(id));")
 
     connexion.commit()
-    connexion.close()
+
+def create_user():
+    nickname = input("Nickname: ")
+    fullname = input("Fullname: ")
+    password = hashlib.sha224(getpass.getpass().encode("utf-8")).hexdigest()
+    email = input("Email: ")
