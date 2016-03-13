@@ -13,4 +13,4 @@ It's a tribute to bacon. Because bacon is great.
 
 ## License
 
-[LICENSE](MIT License)
+[MIT License](LICENSE)
