@@ -43,3 +43,9 @@ def get(host, f):
         print("Password has been copied to clipboard.")
     else:
         print(host + " not found.")
+
+def list(f):
+    for line in open(f, 'r'):
+        account = line.split(":")
+        print(account[0])
+
