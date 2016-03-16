@@ -5,6 +5,7 @@ import os
 from sys import stderr
 from getpass import getpass
 import src.file as bfile
+from Crypto.Cipher import AES
 
 list_cmd = ["list", "get", "add", "help"]
 
@@ -16,6 +17,14 @@ def initialize_parser():
     parser.add_argument("-d", "--delete", action="store_true",
                         help="delete an account")
     return parser.parse_args()
+
+def encrypt(master, host, data):
+    encryption_suite = AES.new(master, AES.MODE_CBC, host)
+    return encryption_suite.encrypt(data)
+
+def decrypt(master, host, data):
+    decryption_suite = AES.new(master, AES.MODE_CBC, host)
+    return decryption_suite.decrypt(data)
 
 def delete_account(account_name):
     file_path = bfile.dir_config + "/" + account_name
