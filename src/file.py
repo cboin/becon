@@ -35,11 +35,11 @@ def get(host, f):
     with open(f, 'r') as bfile:
         bfile.readline()
         for line in bfile:
-            if host in line:
+            l = line.split(':')
+            if l[0] == host:
                 account = line.split(":")
                 print("Host:", account[0])
                 print("Nickname:", account[1])
-                print("PW :", account[2])
                 pyperclip.copy(account[2])
                 print("Password has been copied to clipboard.")
                 return True

@@ -19,11 +19,11 @@ def initialize_parser():
     return parser.parse_args()
 
 def encrypt(master, data):
-    encryption_suite = DES.new(master, DES.MODE_EBC)
+    encryption_suite = DES.new(master, DES.MODE_ECB)
     return encryption_suite.encrypt(data)
 
 def decrypt(master, data):
-    decryption_suite = DES.new(master, DES.MODE_EBC)
+    decryption_suite = DES.new(master, DES.MODE_ECB)
     return decryption_suite.decrypt(data)
 
 def delete_account(account_name):
@@ -55,7 +55,6 @@ def help():
     print("\tlist - list all host")
     print("\tget <host> - copy host password into clipboard")
     print("\tadd <host> - add an host")
-    print("\tdelete <host> - delete host")
     print("\thelp - print list of commands")
             
 def loop(account_name):
@@ -80,8 +79,8 @@ def loop(account_name):
             print(pw, crypted_pw)
     
     # Main loop
+    print("For commands type 'help'", end="\n\n")
     while(True):
-        print("For commands type 'help'", end="\n\n")
         cmd = input('> ').split(' ')
         if cmd[0] not in list_cmd:
             print("error: command not recognized")
@@ -98,6 +97,11 @@ def loop(account_name):
                 else:
                     print("error: command not recognized")
                     help()
+            elif cmd[0] == "add":
+                host = input("Host : ")
+                username = input("Username : ")
+                pw = getpass("Password : ")
+                bfile.add_host(host, username, pw, file_path)    
                 
     
 def main():
