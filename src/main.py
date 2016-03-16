@@ -5,7 +5,7 @@ import os
 from sys import stderr
 from getpass import getpass
 import src.file as bfile
-from Crypto.Cipher import AES
+from Crypto.Cipher import DES
 
 def initialize_parser():
     parser = argparse.ArgumentParser()
@@ -18,12 +18,12 @@ def initialize_parser():
                         help="modify the master password")
     return parser.parse_args()
 
-def encrypt(master, host, data):
-    encryption_suite = AES.new(master, AES.MODE_CBC, host)
+def encrypt(master, data):
+    encryption_suite = DES.new(master, DES.MODE_EBC)
     return encryption_suite.encrypt(data)
 
-def decrypt(master, host, data):
-    decryption_suite = AES.new(master, AES.MODE_CBC, host)
+def decrypt(master, data):
+    decryption_suite = DES.new(master, DES.MODE_EBC)
     return decryption_suite.decrypt(data)
 
 def delete_account(account_name):
