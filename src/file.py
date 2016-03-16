@@ -31,16 +31,25 @@ def add_host(host, user, password, f):
             db.write(account + "\n")
 
 def get(host, f):
-    found = False
+    account = None
     with open(f, 'r') as bfile:
+        bfile.readline()
         for line in bfile:
             if host in line:
                 account = line.split(":")
-                found = True
-                if found:
-                    print("Host: " + account[0])
-                    print("Nickname: " + account[1])
-                    pyperclip.copy(account[2])
-                    print("Password has been copied to clipboard.")
-                else:
-                    print(host + " not found.")
+                print("Host:", account[0])
+                print("Nickname:", account[1])
+                print("PW :", account[2])
+                pyperclip.copy(account[2])
+                print("Password has been copied to clipboard.")
+                return True
+    print(host, "not found.")
+    return False
+
+def list(f):
+    with open(f, 'r') as bfile:
+        bfile.readline()
+        for line in bfile:
+            account = line.split(":")
+            print(account[0])
+
