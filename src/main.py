@@ -3,8 +3,10 @@
 import argparse
 import os
 from sys import stderr
+from getpass import getpass
+import src.file as bfile
 
-def initializeParser():
+def initialize_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", action='version', version='%(prog)s 1.0')
     parser.add_argument("account", type=str, nargs=1,
@@ -15,16 +17,48 @@ def initializeParser():
                         help="modify the master password")
     return parser.parse_args()
 
+def delete_account(account_name):
+    file_path = bfile.dir_config + "/" + account_name
+    if os.path.isfile(file_path):
+        print("Deleting the account:", account_name)
+        confirm = input("Are you sure ? [y/N] ")
+        if (confirm == "" or confirm.lower() == 'n'):
+            print("Canceled")
+        else:
+            os.remove(file_path)
+            print("The account {} is now removed".format(account_name))
+    else:
+        print("The account {} doesn't exists".format(account_name))
+        
+def create_account(account_name):
+    print("Create the account:", account_name)
+    while(True):
+        # TODO : crypt the password
+        pw = getpass("Your master password: ")
+        if getpass("Verify password: ") == pw:
+            with open(bfile.dir_config + "/" + account_name, 'x') as acc_file:
+                acc_file.write(pw)
+            return
+        else:
+            print("error: password do not match", end="\n\n")
+                    
 def main():
-    args = initializeParser()
+    args = initialize_parser()
     if (args.delete and args.modify):
         print(os.path.basename(__file__) + ":", "error: there can be only one argument",
               file=stderr)
     elif (args.delete):
-        print("deleting the account:", args.account)
+        delete_account(args.account[0])
     elif (args.modify):
-        print("modifying the account:", args.account)
+        print("Modifying the account:", args.account)
+        # TODO
     else:
-        print("connecting to the account:", args.account)
+        if not os.path.exists(bfile.dir_config):
+            bfile.mkdir(bfile.dir_config)
 
-    
+        file_path = bfile.dir_config + "/" + args.account[0]
+        if os.path.isfile(file_path):
+            print("Connecting the account:", args.account)
+            # TODO
+        else:
+            create_account(args.account[0])
